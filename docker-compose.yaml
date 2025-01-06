@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+
+  auth-demo-frontend:
+    build:
+      context: https://github.com/tanmayvaij/auth-demo-frontend.git
+    container_name: auth-demo-frontend
+    ports:
+      - 3000:3000
+    environment:
+      - BACKEND_EXPOSE_PORT=${BACKEND_EXPOSE_PORT}
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  auth-demo-backend:
+    build:
+      context: https://github.com/tanmayvaij/auth-demo-backend.git
+    container_name: auth-demo-backend
+    ports:
+      - ${BACKEND_EXPOSE_PORT}:${BACKEND_EXPOSE_PORT}
+    environment:
+      - BACKEND_EXPOSE_PORT=${BACKEND_EXPOSE_PORT}
+      - MONGO_URI=mongodb://mongodb:27017/authdemodb
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+      
+networks:
+  default:
+    name: auth-demo-stack-network
