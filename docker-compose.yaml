@@ -8,7 +8,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - BACKEND_EXPOSE_PORT=${BACKEND_EXPOSE_PORT}
+      - REACT_APP_BACKEND_EXPOSE_PORT=${BACKEND_EXPOSE_PORT}
     depends_on:
       - mongodb
     restart: unless-stopped
