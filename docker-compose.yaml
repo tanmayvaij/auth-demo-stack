@@ -6,11 +6,11 @@ services:
       context: https://github.com/tanmayvaij/auth-demo-frontend.git
     container_name: auth-demo-frontend
     ports:
-      - 3000:3000
+      - 8080:8080
     environment:
-      - REACT_APP_BACKEND_EXPOSE_PORT=${BACKEND_EXPOSE_PORT}
+      - REACT_APP_BACKEND_URL=http://auth-demo-backend:${BACKEND_EXPOSE_PORT}
     depends_on:
-      - mongodb
+      - auth-demo-backend
     restart: unless-stopped
 
   auth-demo-backend:
@@ -20,15 +20,15 @@ services:
     ports:
       - ${BACKEND_EXPOSE_PORT}:${BACKEND_EXPOSE_PORT}
     environment:
+      - MONGO_URI=mongodb://db:27017/authdemodb
       - BACKEND_EXPOSE_PORT=${BACKEND_EXPOSE_PORT}
-      - MONGO_URI=mongodb://mongodb:27017/authdemodb
     depends_on:
-      - mongodb
+      - db
     restart: unless-stopped
 
-  mongodb:
+  db:
     image: mongo
-    container_name: mongodb
+    container_name: db
     ports:
       - 27017:27017
     restart: unless-stopped
